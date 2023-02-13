@@ -1,42 +1,59 @@
-import { DataTable } from 'react-native-paper';
-import { Button, StyleSheet, View } from 'react-native';
-import { ScrollView } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { IStudentDetailWithId } from '../redux/api';
-import { RootState } from '../redux/store';
-import { useEffect } from 'react';
+/* eslint-disable react/react-in-jsx-scope */
+import { DataTable } from 'react-native-paper'
+import { Button, StyleSheet, View, ScrollView } from 'react-native'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import type { IStudentDetailWithId } from '../redux/api'
+import type { RootState } from '../redux/store'
+import { useEffect } from 'react'
 import {
-    deleteStudentDetailsThunk,
-    fetchStudentDetailsThunk
-} from '../redux/slices/studentDetailsSlice';
+  deleteStudentDetailsThunk,
+  fetchStudentDetailsThunk
+} from '../redux/slices/studentDetailsSlice'
 
-const DashboardTable = ({ navigation }: any) => {
-    const headerNames = [
-        'classId',
-        'fName',
-        'lName',
-        'DOB',
-        'className',
-        'Score',
-        'Grade'
-    ];
+const DashboardTable = ({ navigation }: any): JSX.Element => {
+  const headerNames = [
+    'classId',
+    'fName',
+    'lName',
+    'DOB',
+    'className',
+    'Score',
+    'Grade'
+  ]
 
-    const dispatch = useAppDispatch();
-    const studentDetails: IStudentDetailWithId[] = useAppSelector(
-        (state: RootState): IStudentDetailWithId[] =>
-            state.studentDetails.studentDetails
-    );
+  const dispatch = useAppDispatch()
+  const studentDetails: IStudentDetailWithId[] = useAppSelector(
+    (state: RootState): IStudentDetailWithId[] =>
+      state.studentDetails.studentDetails
+  )
 
-    useEffect(() => {
-        dispatch(fetchStudentDetailsThunk());
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchStudentDetailsThunk())
+      .then((result) => {
+        // handle result as necessary
+        console.log('Student details fetched successfully:', result)
+      })
+      .catch((error) => {
+        console.error('Failed to fetch student details:', error)
+        // handle error as necessary
+      })
+  }, [dispatch])
 
-    const deleteDetailHandler = (id: string) => {
-        dispatch(deleteStudentDetailsThunk(id));
-    };
-    const idWidth = 300;
+  const deleteDetailHandler = (id: string): void => {
+    dispatch(deleteStudentDetailsThunk(id))
+      .then((result) => {
+        // Handle result as necessary
+        console.log(`Student detail with id ${id} deleted successfully`, result)
+      })
+      .catch((error) => {
+        // Handle error as necessary
+        console.error(`Failed to delete student detail with id ${id}:`, error)
+      })
+  }
 
-    return (
+  const idWidth = 300
+
+  return (
         <View style={{ flex: 2 }}>
             <ScrollView style={{ height: 700 }}>
                 <DataTable style={styles.container}>
@@ -49,14 +66,14 @@ const DashboardTable = ({ navigation }: any) => {
                                 Id
                             </DataTable.Title>
                             {headerNames.map(
-                                (my_name: string, index: number) => (
+                              (myName: string, index: number) => (
                                     <DataTable.Title
                                         key={index}
                                         style={{ width: 100 }}
                                     >
-                                        {my_name}
+                                        {myName}
                                     </DataTable.Title>
-                                )
+                              )
                             )}
                             <DataTable.Title style={{ width: 100 }}>
                                 Deleteknapp
@@ -72,12 +89,12 @@ const DashboardTable = ({ navigation }: any) => {
                                     <Button
                                         title="distribution"
                                         onPress={() =>
-                                            navigation.navigate(
-                                                'DistributionGraph',
-                                                {
-                                                    classId: sd.classId
-                                                }
-                                            )
+                                          navigation.navigate(
+                                            'DistributionGraph',
+                                            {
+                                              classId: sd.classId
+                                            }
+                                          )
                                         }
                                     />
                                 </DataTable.Cell>
@@ -104,8 +121,7 @@ const DashboardTable = ({ navigation }: any) => {
                                 </DataTable.Cell>
                                 <DataTable.Cell style={{ width: 100 }}>
                                     <Button
-                                        onPress={() =>
-                                            deleteDetailHandler(sd.id)
+                                        onPress={() => { deleteDetailHandler(sd.id) }
                                         }
                                         title="Delete"
                                     ></Button>
@@ -113,9 +129,9 @@ const DashboardTable = ({ navigation }: any) => {
                                 <DataTable.Cell style={{ width: 100 }}>
                                     <Button
                                         onPress={() =>
-                                            navigation.navigate('EditDetail', {
-                                                id: sd.id
-                                            })
+                                          navigation.navigate('EditDetail', {
+                                            id: sd.id
+                                          })
                                         }
                                         title="Edit"
                                     ></Button>
@@ -126,16 +142,16 @@ const DashboardTable = ({ navigation }: any) => {
                 </DataTable>
             </ScrollView>
         </View>
-    );
-};
+  )
+}
 
-export default DashboardTable;
+export default DashboardTable
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 15
-    },
-    tableHeader: {
-        backgroundColor: '#DCDCDC'
-    }
-});
+  container: {
+    padding: 15
+  },
+  tableHeader: {
+    backgroundColor: '#DCDCDC'
+  }
+})
