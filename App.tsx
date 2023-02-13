@@ -1,24 +1,21 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "./screens/Home";
-import DistributionGraph from "./screens/DistributionGraph";
-import EditDetail from "./screens/EditDetail";
-import { store } from "./redux/store";
-import { Provider } from "react-redux";
-import { useEffect } from "react";
-import { useAppDispatch } from "./redux/hooks";
-import { fetchStudentDetailsThunk } from "./redux/slices/studentDetailsSlice";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from './screens/Home';
+import DistributionGraph from './screens/DistributionGraph';
+import EditDetail from './screens/EditDetail';
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  /*
+    /*
   const [myStudentDetails, setMyStudentDetails] = useState<
     Array<StudentDetail>
   >([]);
   */
 
-  /*
+    /*
   useEffect(() => {
     let arr: StudentDetail[] = [];
     arr.push({
@@ -47,27 +44,27 @@ export default function App() {
   }, []);
   */
 
-  return (
-    <NavigationContainer>
-      <Provider store={store}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ title: "Home" }}
-          />
-          <Stack.Screen
-            name="DistributionGraph"
-            component={DistributionGraph}
-            options={{ title: "Distribution graph" }}
-          />
-          <Stack.Screen
-            name="EditDetail"
-            component={EditDetail}
-            options={{ title: "Edit Detail" }}
-          />
-        </Stack.Navigator>
-      </Provider>
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <Provider store={store}>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="Home"
+                        component={Home}
+                        options={{ title: 'Home' }}
+                    />
+                    <Stack.Screen
+                        name="DistributionGraph"
+                        component={DistributionGraph}
+                        options={{ title: 'Distribution graph' }}
+                    />
+                    <Stack.Screen
+                        name="EditDetail"
+                        component={EditDetail}
+                        options={{ title: 'Edit Detail' }}
+                    />
+                </Stack.Navigator>
+            </Provider>
+        </NavigationContainer>
+    );
 }
