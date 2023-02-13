@@ -1,72 +1,78 @@
-import { useState } from 'react';
+/* eslint-disable react/react-in-jsx-scope */
+
+import { useState } from 'react'
 import {
-    Text,
-    TextInput,
-    View,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform
-} from 'react-native';
-import { IStudentDetail } from '../redux/api';
-import { useAppDispatch } from '../redux/hooks';
-import { addStudentDetailsThunk } from '../redux/slices/studentDetailsSlice';
-import { styles } from '../styles.js';
-import { validate } from '../utils/Validate';
-import { generateMockData } from '../utils/mockData';
-import { useEffect } from 'react';
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native'
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { IStudentDetail } from '../redux/api'
+import { useAppDispatch } from '../redux/hooks'
+import { addStudentDetailsThunk } from '../redux/slices/studentDetailsSlice'
+import { styles } from '../styles.js'
+import { validate } from '../utils/Validate'
+import { generateMockData } from '../utils/mockData'
 
-const AddDetail = () => {
-    const [classId, setClassId] = useState<string>('');
-    const [fName, setFName] = useState<string>('');
-    const [lName, setLName] = useState<string>('');
-    const [DOB, setDOB] = useState<string>('');
-    const [className, setClassName] = useState<string>('');
-    const [score, setScore] = useState<number>(0);
-    const [Grade, setGrade] = useState<string>('B');
-    const [error, setError] = useState<string>('');
+const AddDetail = (): JSX.Element => {
+  const [classId, setClassId] = useState<string>('')
+  const [fName, setFName] = useState<string>('')
+  const [lName, setLName] = useState<string>('')
+  const [DOB, setDOB] = useState<string>('')
+  const [className, setClassName] = useState<string>('')
+  const [score, setScore] = useState<number>(0)
+  const [Grade, setGrade] = useState<string>('B')
+  const [error, setError] = useState<string>('')
 
-    // Define dispatch function from Redux store
-    const dispatch = useAppDispatch();
+  // Define dispatch function from Redux store
+  const dispatch = useAppDispatch()
 
-    // Create an object containing the details of a new student
-    const my_sd: IStudentDetail = {
-        classId: classId,
-        fName: fName,
-        lName: lName,
-        DOB: DOB,
-        class: className,
-        Score: score,
-        Grade: Grade
-    };
-    const addMockDataHandler = () => {
-        const mockData = generateMockData(3);
-        dispatch(addStudentDetailsThunk(mockData[0]));
-        for (let i = 1; i < mockData.length; i++) {
-            dispatch(addStudentDetailsThunk(mockData[i]));
-        }
-    };
-    // Function to add the new student detail to the store and reset input fields
-    const addDetailHandler = () => {
-        setError('');
-        // Validate input details
-        const errorMessage = validate(my_sd);
-        if (errorMessage) {
-            setError(errorMessage);
-            return;
-        }
-        // Add the new student detail to the store
-        dispatch(addStudentDetailsThunk(my_sd));
-        // Reset input fields to default values
-        setClassId('');
-        setFName('');
-        setLName('');
-        setDOB('');
-        setClassName('');
-        setScore(8);
-        setGrade('');
-    };
+  // Create an object containing the details of a new student
+  const mySd: IStudentDetail = {
+    classId,
+    fName,
+    lName,
+    DOB,
+    class: className,
+    Score: score,
+    Grade
+  }
+  const addMockDataHandler = async (): Promise<void> => {
+    const mockData = generateMockData(3)
+    try {
+      await dispatch(addStudentDetailsThunk(mockData[0]))
+    } catch (error) {
+      console.error('An error occurred while adding mock data:', error)
+    }
+    for (let i = 0; i < mockData.length; i++) {
+      await dispatch(addStudentDetailsThunk(mockData[i]))
+    }
+  }
+  // Function to add the new student detail to the store and reset input fields
+  const addDetailHandler = async (): Promise<void> => {
+    setError('')
+    // Validate input details
+    const errorMessage = validate(mySd)
+    if (errorMessage !== null) {
+      setError(errorMessage)
+      return
+    }
+    // Add the new student detail to the store
+    await dispatch(addStudentDetailsThunk(mySd))
+    // Reset input fields to default values
+    setClassId('')
+    setFName('')
+    setLName('')
+    setDOB('')
+    setClassName('')
+    setScore(8)
+    setGrade('')
+  }
 
-    return (
+  return (
         <KeyboardAvoidingView
             style={[styles.container, { flex: 1 }]}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -82,7 +88,7 @@ const AddDetail = () => {
                                 onChangeText={setClassId}
                             />
                         </View>
-                        {error && error.includes('classId') && (
+                        {error?.includes('classId') && error !== '' && (
                             <Text style={styles.error}>{error}</Text>
                         )}
                     </View>
@@ -95,7 +101,7 @@ const AddDetail = () => {
                                 onChangeText={setFName}
                             />
                         </View>
-                        {error && error.includes('fName') && (
+                        {error?.includes('fName') && (
                             <Text style={styles.error}>{error}</Text>
                         )}
                     </View>
@@ -108,7 +114,7 @@ const AddDetail = () => {
                                 onChangeText={setLName}
                             />
                         </View>
-                        {error && error.includes('lName') && (
+                        {error?.includes('lName') && (
                             <Text style={styles.error}>{error}</Text>
                         )}
                     </View>
@@ -121,7 +127,7 @@ const AddDetail = () => {
                                 onChangeText={setDOB}
                             />
                         </View>
-                        {error && error.includes('DOB') && (
+                        {error?.includes('DOB') && (
                             <Text style={styles.error}>{error}</Text>
                         )}
                     </View>
@@ -136,26 +142,28 @@ const AddDetail = () => {
                                 onChangeText={setClassName}
                             />
                         </View>
-                        {error && error.includes('className') && (
+                        {error?.includes('className') && (
                             <Text style={styles.error}>{error}</Text>
                         )}
                     </View>
                     <View style={[styles.col, styles.col5]}>
                         <View
                             style={[
-                                styles.inputWrapper,
-                                styles.inputWrapperNumeric
+                              styles.inputWrapper,
+                              styles.inputWrapperNumeric
                             ]}
                         >
                             <TextInput
                                 style={styles.input}
                                 placeholder="score"
                                 value={score.toString()}
-                                onChangeText={(text) => setScore(Number(text))}
+                                onChangeText={(text) => {
+                                  setScore(Number(text))
+                                }}
                                 keyboardType="numeric"
                             />
                         </View>
-                        {error && error.includes('score') && (
+                        {error?.includes('score') && (
                             <Text style={styles.error}>{error}</Text>
                         )}
                     </View>
@@ -168,19 +176,18 @@ const AddDetail = () => {
                                 onChangeText={setGrade}
                             />
                         </View>
-                        {error && error.includes('grade') && (
+                        {error?.includes('grade') && (
                             <Text style={styles.error}>{error}</Text>
                         )}
                     </View>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity
-                        onPress={addDetailHandler}
-                        style={styles.addButton}
-                    >
+                <TouchableOpacity style={styles.addButton} onPress={addDetailHandler}>
+  <Text style={styles.addButtonText}>Add Detail</Text>
+</TouchableOpacity>
                         <Text style={{ color: '#FFFFFF' }}>Add</Text>
-                    </TouchableOpacity>
+
                     <TouchableOpacity
                         onPress={addMockDataHandler}
                         style={styles.addMockButton}
@@ -190,7 +197,7 @@ const AddDetail = () => {
                 </View>
             </View>
         </KeyboardAvoidingView>
-    );
-};
+  )
+}
 
-export default AddDetail;
+export default AddDetail

@@ -1,15 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
-import studentDetailsReducer from './slices/studentDetailsSlice';
+import { configureStore } from '@reduxjs/toolkit'
+import type { Store } from '@reduxjs/toolkit'
+import studentDetailsReducer from './slices/studentDetailsSlice'
 
 const reducer = {
-    studentDetails: studentDetailsReducer
-};
-
-export const store = configureStore({ reducer });
-
-export function getStoreWithState(preloadedState?: RootState) {
-    return configureStore({ reducer, preloadedState });
+  studentDetails: studentDetailsReducer
 }
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export const store = configureStore({ reducer })
+
+export function getStoreWithState (preloadedState?: RootState): Store<RootState> {
+  return configureStore({ reducer, preloadedState })
+}
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
