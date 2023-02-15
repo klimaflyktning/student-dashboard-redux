@@ -1,16 +1,59 @@
 module.exports = {
-    env: {
-        es2021: true,
-        node: true
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+    jest: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:jest/recommended',
+    'plugin:testing-library/react',
+    'plugin:testing-library/react-hooks',
+    'plugin:prettier/recommended',
+    'plugin:react/jsx-runtime'
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    extends: ['plugin:react/recommended', 'standard-with-typescript'],
-    overrides: [],
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        project: './tsconfig.json' // add this line
+    ecmaVersion: 12,
+    project: './tsconfig.json',
+    sourceType: 'module',
+    tsconfigRootDir: __dirname,
+  },
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'jest', 'testing-library'],
+  rules: {
+    'no-console': 'warn',
+    'no-debugger': 'warn',
+    'no-unused-vars': 'warn',
+    'no-shadow': 'warn',
+    'no-useless-constructor': 'warn',
+    'no-extra-semi': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
+    'jest/no-identical-title': 'warn',
+    'testing-library/no-node-access': 'warn',
+    'testing-library/no-container': 'warn',
+    'testing-library/no-debug': 'warn',
+    'testing-library/no-wait-for-empty-callback': 'warn',
+    'testing-library/no-wait-for-multiple-assertions': 'warn',
+    'testing-library/prefer-screen-queries': 'warn',
+    'testing-library/render-result-naming-convention': 'warn',
+    'testing-library/await-async-query': 'warn',
+    'testing-library/prefer-user-event': 'warn',
+  },
+  settings: {
+    react: {
+      version: 'detect',
     },
-    plugins: ['react'],
-    rules: {}
+  },
 };
