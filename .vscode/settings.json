@@ -1,0 +1,14 @@
+{
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true, // required
+    "editor.formatOnPaste": false, // required
+    "editor.formatOnType": true, // required
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }, // optional
+    "editor.formatOnSaveMode": "file", // required to format on save
+    "files.autoSave": "onFocusChange",
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
