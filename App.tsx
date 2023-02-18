@@ -5,45 +5,11 @@ import DistributionGraph from './screens/DistributionGraph';
 import EditDetail from './screens/EditDetail';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
+import React from 'react';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-    /*
-  const [myStudentDetails, setMyStudentDetails] = useState<
-    Array<StudentDetail>
-  >([]);
-  */
-
-    /*
-  useEffect(() => {
-    let arr: StudentDetail[] = [];
-    arr.push({
-      id: "1",
-      classId: "MGMT329",
-      fName: "Aaron",
-      lName: "French",
-      DOB: "04/09/2000",
-      className: "Database",
-      score: 80,
-      grade: "B",
-    });
-
-    arr.push({
-      id: "2",
-      classId: "TTT123",
-      fName: "Ronald",
-      lName: "McDonald",
-      DOB: "04/09/2010",
-      className: "Fysikk 1",
-      score: 95,
-      grade: "A",
-    });
-
-    setMyStudentDetails(arr);
-  }, []);
-  */
-
     return (
         <NavigationContainer>
             <Provider store={store}>

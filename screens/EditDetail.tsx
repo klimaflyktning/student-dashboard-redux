@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react'
+import React from 'react';
+import { useState, useCallback, useMemo } from 'react'
 import { Button, Text, TextInput } from 'react-native'
 import type { IStudentDetail } from '../redux/api'
 import { useAppDispatch } from '../redux/hooks'
@@ -7,46 +8,31 @@ import { editStudentDetailsThunk } from '../redux/slices/studentDetailsSlice'
 import { getGradeFromScore } from '../utils/helpers'
 import PropTypes from 'prop-types'
 
-const EditDetail: React.FC<{ navigation: any, route: any }> = ({
-  navigation,
-  route
-}) => {
-  const [classId, setClassId] = useState<string>('TTT123')
-  const [fName, setFName] = useState<string>('Hans')
-  const [lName, setLName] = useState<string>('Smecker')
-  const [DOB, setDOB] = useState<string>('01/02/95')
-  const [className, setClassName] = useState<string>('Databases')
-  const [score, setScore] = useState<number>(80)
-  // const [grade, setGrade] = useState<string>("B");
-
-  // const [studentDetails, setStudentDetails] = useContext(studentDetailsContext);
-  /*
-  const studentDetails: IStudentDetailWithId[] = useAppSelector(
-    (state: RootState): IStudentDetailWithId[] => state.studentDetails.studentDetails
-  );
-  */
-
+const EditDetail: React.FC<{ navigation: any, route: any }> = React.memo((props) => {
+  const { navigation, route } = props
+  const [formValues, setFormValues] = useState({
+    classId: 'TTT123',
+    fName: 'Hans',
+    lName: 'Smecker',
+    DOB: '01/02/95',
+    className: 'Databases',
+    score: 80,
+  })
   const { id } = route.params
   const dispatch = useAppDispatch()
 
-  const editDetailHandler = (myId: string, navigation: any): void => {
+  const grade = useMemo(() => getGradeFromScore(formValues.score), [formValues.score])
+
+  const editDetailHandler = useCallback((myId: string, navigation: any) => {
     const mySd: IStudentDetail = {
-      classId,
-      fName,
-      lName,
-      DOB,
-      class: className,
-      Score: score,
-      Grade: getGradeFromScore(score)
+      classId: formValues.classId,
+      fName: formValues.fName,
+      lName: formValues.lName,
+      DOB: formValues.DOB,
+      class: formValues.className,
+      Score: Number(formValues.score),
+      Grade: grade
     }
-
-    // setStudentDetails((sd_arr) => sd_arr.filter((x) => x.id !== my_id));
-    // setStudentDetails((sd_arr) => [...sd_arr, my_sd]);
-
-    // dispatching delete and then add, less than ideal..
-    // dispatch(deleteStudentDetailsThunk(my_id));
-    // dispatch(addStudentDetailsThunk(my_sd));
-
     dispatch(editStudentDetailsThunk({ id: myId, sd: mySd }))
       .then((result) => {
         // Handle result as necessary
@@ -57,42 +43,55 @@ const EditDetail: React.FC<{ navigation: any, route: any }> = ({
         // Handle error as necessary
         console.error('Failed to edit student details:', error)
       })
-  }
+  }, [dispatch, formValues, grade])
+
+  const handleFormValueChange = useCallback((fieldName: string, value: string) => {
+    setFormValues(prevValues => ({
+      ...prevValues,
+      [fieldName]: value
+    }))
+  }, [])
 
   return (
         <>
             <Text>Fill out form below to edit detail with id {id}:</Text>
             <TextInput
-                onChangeText={(newVal: string) => { setClassId(newVal) }}
+                onChangeText={(newVal: string) => handleFormValueChange('classId', newVal)}
                 placeholder="classId"
+                value={formValues.classId}
             />
             <TextInput
-                onChangeText={(newVal: string) => { setFName(newVal) }}
+                onChangeText={(newVal: string) => handleFormValueChange('fName', newVal)}
                 placeholder="fName"
+                value={formValues.fName}
             />
             <TextInput
-                onChangeText={(newVal: string) => { setLName(newVal) }}
+                onChangeText={(newVal: string) => handleFormValueChange('lName', newVal)}
                 placeholder="lName"
+                value={formValues.lName}
             />
             <TextInput
-                onChangeText={(newVal: string) => { setDOB(newVal) }}
+                onChangeText={(newVal: string) => handleFormValueChange('DOB', newVal)}
                 placeholder="DOB"
+                value={formValues.DOB}
             />
             <TextInput
-                onChangeText={(newVal: string) => { setClassName(newVal) }}
+                onChangeText={(newVal: string) => handleFormValueChange('className', newVal)}
                 placeholder="className"
+                value={formValues.className}
             />
             <TextInput
-                onChangeText={(newVal: string) => { setScore(Number(newVal)) }}
-                placeholder="score"
-            />
+  onChangeText={(newVal: string) => handleFormValueChange('score', newVal)}
+  placeholder="score"
+  value={formValues.score.toString()}
+/>
             <Button
                 onPress={() => { editDetailHandler(route.params.id, navigation) }}
                 title="Edit"
             ></Button>
         </>
   )
-}
+})
 EditDetail.propTypes = {
   navigation: PropTypes.any.isRequired,
   route: PropTypes.any.isRequired
